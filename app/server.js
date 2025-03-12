@@ -1,6 +1,7 @@
 var express = require("express");
 var serialize = require('node-serialize');
 var cprocess = require('child_process');
+var DOMPurify = require("DOMPurify");
 // Error installing libxmljs:
 //     Error: Cannot find module '../'
 // var libxmljs = require('libxmljs');
@@ -29,9 +30,9 @@ process.on('SIGINT', gracefulShutdown);
 app.get("/cwe95/rgbToHex", function(req, res) {
   // To fix these security vulnerabilities, 
   // Replace the three eval() statements with their parseInt() versions.
-  var red = eval(req.query.red);
-  var green = eval(req.query.green, 10);
-  var blue  = eval(req.query.blue, 10);
+  var red = DOMPurify.sanitize(eval(req.query.red));
+  var green = DOMPurify.sanitize(eval(req.query.green, 10));
+  var blue  = DOMPurify.sanitize(eval(req.query.blue, 10));
 
   // var red   = parseInt(req.query.red, 10);
   // var green = parseInt(req.query.green, 10);
